@@ -6,7 +6,7 @@ package com.example.kiram.navigation
 sealed class Screen(val route: String) {
     // Authentication routes
     object Splash : Screen("splash")
-    object onboarding : Screen("onboarding")
+    object Onboarding : Screen("onboarding")
     object Login : Screen("login")
     object Register : Screen("register")
     object ForgotPassword : Screen("forgot_password")

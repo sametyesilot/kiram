@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -147,7 +148,7 @@ private fun BuildingStatsCard(
             )
             
             StatItem(
-                icon = Icons.Default.HouseOutlined,
+                icon = Icons.Outlined.Home,
                 label = "Boş",
                 value = (totalProperties - occupiedProperties).toString()
             )

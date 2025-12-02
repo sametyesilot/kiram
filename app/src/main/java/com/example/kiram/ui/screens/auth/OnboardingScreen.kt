@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
@@ -158,7 +159,7 @@ private fun OnboardingPage(
         Text(
             text = icon,
             style = MaterialTheme.typography.displayLarge,
-            fontSize = 80.dp.value.toInt().sp
+            fontSize = 80.sp
         )
         
         Spacer(modifier = Modifier.height(32.dp))
