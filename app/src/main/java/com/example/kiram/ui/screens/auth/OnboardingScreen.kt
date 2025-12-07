@@ -17,13 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
+import com.example.kiram.KiramApplication
 import com.example.kiram.ui.components.KiramPrimaryButton
 import com.example.kiram.ui.components.KiramSecondaryButton
 import com.example.kiram.util.Constants
 import kotlinx.coroutines.launch
-
-private val Context.dataStore by preferencesDataStore(name = Constants.DATASTORE_NAME)
 
 /**
  * Onboarding screens (3 pages)
@@ -86,7 +84,8 @@ fun OnboardingScreen(
                 onClick = {
                     coroutineScope.launch {
                         // Mark onboarding as completed
-                        context.dataStore.edit { preferences ->
+                        val dataStore = (context.applicationContext as KiramApplication).dataStore
+                        dataStore.edit { preferences ->
                             preferences[booleanPreferencesKey(Constants.KEY_ONBOARDING_COMPLETED)] = true
                         }
                         onNavigateToLogin()
@@ -102,7 +101,8 @@ fun OnboardingScreen(
                     text = "Atla",
                     onClick = {
                         coroutineScope.launch {
-                            context.dataStore.edit { preferences ->
+                            val dataStore = (context.applicationContext as KiramApplication).dataStore
+                            dataStore.edit { preferences ->
                                 preferences[booleanPreferencesKey(Constants.KEY_ONBOARDING_COMPLETED)] = true
                             }
                             onNavigateToLogin()

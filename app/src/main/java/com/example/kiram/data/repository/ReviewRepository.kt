@@ -65,6 +65,7 @@ class ReviewRepository(
                 is Result.Success -> result.data
                 is Result.Error -> throw Exception(result.message)
                 Result.Loading -> emptyList()
+                Result.Idle -> emptyList()
             }
             
             if (reviews.isEmpty()) {

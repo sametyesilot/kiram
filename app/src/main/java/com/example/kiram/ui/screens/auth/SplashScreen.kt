@@ -12,11 +12,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
+import com.example.kiram.KiramApplication
 import com.example.kiram.navigation.Screen
 import com.example.kiram.util.Constants
 import kotlinx.coroutines.delay
@@ -38,7 +36,7 @@ fun SplashScreen(
         delay(2000) // Show splash for 2 seconds
         
         // Check onboarding status and login status
-        val dataStore = context.dataStore
+        val dataStore = (context.applicationContext as KiramApplication).dataStore
         val preferences = dataStore.data.first()
         
         val onboardingCompleted = preferences[booleanPreferencesKey(Constants.KEY_ONBOARDING_COMPLETED)] ?: false
@@ -78,6 +76,3 @@ fun SplashScreen(
         }
     }
 }
-
-// DataStore extension
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constants.DATASTORE_NAME)

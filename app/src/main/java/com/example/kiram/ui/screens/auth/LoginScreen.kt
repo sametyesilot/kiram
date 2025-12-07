@@ -21,14 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kiram.KiramApplication
 import com.example.kiram.ui.components.*
 import com.example.kiram.util.Constants
 import com.example.kiram.util.Result
 import kotlinx.coroutines.launch
-
-private val Context.dataStore by preferencesDataStore(name = Constants.DATASTORE_NAME)
 
 /**
  * Login Screen
@@ -55,7 +53,8 @@ fun LoginScreen(
             is Result.Success -> {
                 val user = state.data
                 // Save login info to DataStore
-                context.dataStore.edit { preferences ->
+                val dataStore = (context.applicationContext as KiramApplication).dataStore
+                dataStore.edit { preferences ->
                     preferences[booleanPreferencesKey(Constants.KEY_IS_LOGGED_IN)] = true
                     preferences[stringPreferencesKey(Constants.KEY_USER_ID)] = user.userId
                     preferences[stringPreferencesKey(Constants.KEY_USER_ROLE)] = user.role.name
@@ -67,6 +66,9 @@ fun LoginScreen(
             }
             Result.Loading -> {
                 // Loading state
+            }
+            Result.Idle -> {
+                // Initial idle state
             }
         }
     }

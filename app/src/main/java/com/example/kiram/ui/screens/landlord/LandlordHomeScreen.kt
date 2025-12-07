@@ -109,6 +109,9 @@ fun LandlordHomeScreen(
                     }
                 }
             }
+            Result.Idle -> {
+                // Initial idle state
+            }
         }
     }
 }
@@ -224,7 +227,7 @@ class LandlordHomeViewModel(
     private val propertyRepository: PropertyRepository = PropertyRepository()
 ) : ViewModel() {
     
-    private val _propertiesState = MutableStateFlow<Result<List<Property>>>(Result.Loading)
+    private val _propertiesState = MutableStateFlow<Result<List<Property>>>(Result.Idle)
     val propertiesState: StateFlow<Result<List<Property>>> = _propertiesState
     
     fun loadProperties() {

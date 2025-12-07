@@ -23,15 +23,15 @@ class AuthViewModel(
 ) : ViewModel() {
     
     // Login state
-    private val _loginState = MutableStateFlow<Result<User>>(Result.Loading)
+    private val _loginState = MutableStateFlow<Result<User>>(Result.Idle)
     val loginState: StateFlow<Result<User>> = _loginState.asStateFlow()
     
     // Registration state
-    private val _registerState = MutableStateFlow<Result<User>>(Result.Loading)
+    private val _registerState = MutableStateFlow<Result<User>>(Result.Idle)
     val registerState: StateFlow<Result<User>> = _registerState.asStateFlow()
     
     // Password reset state
-    private val _passwordResetState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _passwordResetState = MutableStateFlow<Result<Unit>>(Result.Idle)
     val passwordResetState: StateFlow<Result<Unit>> = _passwordResetState.asStateFlow()
     
     /**
@@ -39,20 +39,25 @@ class AuthViewModel(
      */
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            _loginState.value = Result.Loading
-            
-            // Validate inputs
-            if (!email.isValidEmail()) {
-                _loginState.value = Result.Error("Geçersiz e-posta adresi")
-                return@launch
+            try {
+                _loginState.value = Result.Loading
+                
+                // Validate inputs
+                if (!email.isValidEmail()) {
+                    _loginState.value = Result.Error("Geçersiz e-posta adresi")
+                    return@launch
+                }
+                
+                if (!password.isValidPassword()) {
+                    _loginState.value = Result.Error("Şifre en az 6 karakter olmalıdır")
+                    return@launch
+                }
+                
+                val result = authRepository.loginUser(email, password)
+                _loginState.value = result
+            } catch (e: Exception) {
+                _loginState.value = Result.Error("Giriş sırasında bir hata oluştu: ${e.localizedMessage ?: e.message}")
             }
-            
-            if (!password.isValidPassword()) {
-                _loginState.value = Result.Error("Şifre en az 6 karakter olmalıdır")
-                return@launch
-            }
-            
-            _loginState.value = authRepository.loginUser(email, password)
         }
     }
     
@@ -135,20 +140,20 @@ class AuthViewModel(
      * Reset login state
      */
     fun resetLoginState() {
-        _loginState.value = Result.Loading
+        _loginState.value = Result.Idle
     }
     
     /**
      * Reset registration state
      */
     fun resetRegisterState() {
-        _registerState.value = Result.Loading
+        _registerState.value = Result.Idle
     }
     
     /**
      * Reset password reset state
      */
     fun resetPasswordResetState() {
-        _passwordResetState.value = Result.Loading
+        _passwordResetState.value = Result.Idle
     }
 }

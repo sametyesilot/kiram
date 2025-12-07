@@ -68,7 +68,12 @@ class AuthRepository(
     suspend fun loginUser(email: String, password: String): Result<User> {
         return try {
             // Sign in with Firebase Auth
-            auth.signInWithEmailAndPassword(email, password).await()
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            
+            // Check if user is signed in
+            if (authResult.user == null) {
+                return Result.Error("Giriş başarısız: Kullanıcı bilgisi alınamadı")
+            }
             
             // Get user data from Firestore
             val querySnapshot = firestore.collection(Constants.COLLECTION_USERS)
@@ -77,15 +82,29 @@ class AuthRepository(
                 .await()
             
             if (querySnapshot.documents.isEmpty()) {
-                throw Exception("Kullanıcı bulunamadı")
+                return Result.Error("Kullanıcı bulunamadı. Lütfen kayıt olun.")
             }
             
             val user = querySnapshot.documents[0].toObject(User::class.java)
-                ?: throw Exception("Kullanıcı verileri okunamadı")
+            if (user == null) {
+                return Result.Error("Kullanıcı verileri okunamadı")
+            }
             
             Result.Success(user)
+        } catch (e: com.google.firebase.auth.FirebaseAuthException) {
+            // Handle Firebase Auth specific errors
+            val errorMessage = when {
+                e.errorCode == "ERROR_INVALID_EMAIL" -> "Geçersiz e-posta adresi"
+                e.errorCode == "ERROR_WRONG_PASSWORD" -> "Hatalı şifre"
+                e.errorCode == "ERROR_USER_NOT_FOUND" -> "Kullanıcı bulunamadı"
+                e.errorCode == "ERROR_USER_DISABLED" -> "Bu hesap devre dışı bırakılmış"
+                e.errorCode == "ERROR_TOO_MANY_REQUESTS" -> "Çok fazla deneme. Lütfen daha sonra tekrar deneyin"
+                e.errorCode == "ERROR_NETWORK_REQUEST_FAILED" -> "Ağ hatası. İnternet bağlantınızı kontrol edin"
+                else -> "Giriş başarısız: ${e.localizedMessage ?: e.message}"
+            }
+            Result.Error(errorMessage, e)
         } catch (e: Exception) {
-            Result.Error("Giriş başarısız: ${e.localizedMessage}", e)
+            Result.Error("Giriş başarısız: ${e.localizedMessage ?: e.message ?: "Bilinmeyen hata"}", e)
         }
     }
     

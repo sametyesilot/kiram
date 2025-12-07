@@ -1,10 +1,15 @@
 package com.example.kiram.navigation
 
 import android.content.Context
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,15 +20,15 @@ import com.example.kiram.ui.screens.auth.*
 import com.example.kiram.ui.screens.tenant.TenantHomeScreen
 import com.example.kiram.ui.screens.landlord.LandlordHomeScreen
 import com.example.kiram.ui.screens.manager.ManagerHomeScreen
+import com.example.kiram.KiramApplication
 import com.example.kiram.util.Constants
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-private val Context.dataStore by preferencesDataStore(name = Constants.DATASTORE_NAME)
-
 /**
  * Main navigation graph for KİRÂM app
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KiramNavigation(
     navController: NavHostController
@@ -187,7 +192,222 @@ fun KiramNavigation(
             }
         }
         
-        // TODO: Add other screens (PropertyDetail, AddProperty, Messages, etc.)
+        // Placeholder screens - TODO: Implement these screens
+        composable(Screen.Profile.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Profil") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Profil ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.Messages.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Mesajlar") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Mesajlar ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.PropertyDetail.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Ev Detayı") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Ev detayı ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.AddProperty.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Ev Ekle") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Ev ekleme ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.PropertyManagement.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Ev Yönetimi") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Ev yönetimi ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.DisputeManagement.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Anlaşmazlıklar") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Anlaşmazlıklar ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.CreateAnnouncement.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Duyuru Oluştur") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Duyuru oluşturma ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.MaintenanceFees.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Aidat Yönetimi") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Aidat yönetimi ekranı yakında eklenecek")
+                }
+            }
+        }
+        
+        composable(Screen.BuildingIssues.route) {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text("Bina Sorunları") },
+                        navigationIcon = {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Bina sorunları ekranı yakında eklenecek")
+                }
+            }
+        }
     }
 }
 
@@ -211,7 +431,8 @@ private fun navigateToRoleHome(navController: NavHostController, roleString: Str
  * Get user ID from DataStore
  */
 private suspend fun getUserId(context: Context): String {
-    return context.dataStore.data.map { preferences ->
+    val dataStore = (context.applicationContext as KiramApplication).dataStore
+    return dataStore.data.map { preferences ->
         preferences[stringPreferencesKey(Constants.KEY_USER_ID)] ?: ""
     }.first()
 }
