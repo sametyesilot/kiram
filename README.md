@@ -187,18 +187,3 @@ app/src/main/java/com/example/kiram/
 4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
-## 📄 Lisans
-
-Bu proje [MIT Lisansı](LICENSE) altında lisanslanmıştır.
-
-## 📞 İletişim
-
-Proje Sahibi - [@kullanıcı-adınız](https://github.com/kullanıcı-adınız)
-
-Proje Linki: [https://github.com/kullanıcı-adınız/kiram](https://github.com/kullanıcı-adınız/kiram)
-
-## 🙏 Teşekkürler
-
-- [Firebase](https://firebase.google.com/) - Backend servisleri
-- [Jetpack Compose](https://developer.android.com/jetpack/compose) - UI framework
-- [Material Design 3](https://m3.material.io/) - Tasarım sistemi
