@@ -40,6 +40,17 @@ class PropertyRepository(
     }
     
     /**
+     * Create property (alias for addProperty)
+     */
+    suspend fun createProperty(property: Property): Result<String> {
+        return when (val result = addProperty(property)) {
+            is Result.Success -> Result.Success(result.data.propertyId)
+            is Result.Error -> Result.Error(result.message, result.exception)
+            else -> Result.Error("Beklenmeyen hata")
+        }
+    }
+    
+    /**
      * Update property
      */
     suspend fun updateProperty(property: Property): Result<Unit> {
@@ -169,6 +180,26 @@ class PropertyRepository(
             Result.Success(downloadUrls)
         } catch (e: Exception) {
             Result.Error("Fotoğraflar yüklenemedi: ${e.localizedMessage}", e)
+        }
+    }
+    
+    /**
+     * Get all available properties (for tenants to browse)
+     */
+    suspend fun getAvailableProperties(): Result<List<Property>> {
+        return try {
+            val querySnapshot = firestore.collection(Constants.COLLECTION_PROPERTIES)
+                // .whereEqualTo("isAvailable", true) // Temporarily removed for debugging
+                .get()
+                .await()
+            
+            val properties = querySnapshot.documents.mapNotNull { 
+                it.toObject(Property::class.java) 
+            }
+            
+            Result.Success(properties)
+        } catch (e: Exception) {
+            Result.Error("Evler alınamadı: ${e.localizedMessage}", e)
         }
     }
 }

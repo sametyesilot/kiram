@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,6 +25,7 @@ import com.example.kiram.KiramApplication
 import com.example.kiram.util.Constants
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 /**
  * Main navigation graph for KİRÂM app
@@ -192,28 +194,35 @@ fun KiramNavigation(
             }
         }
         
-        // Placeholder screens - TODO: Implement these screens
+        // Profile Screen
         composable(Screen.Profile.route) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text("Profil") },
-                        navigationIcon = {
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
+            val userId = remember { mutableStateOf("") }
+            LaunchedEffect(Unit) {
+                userId.value = getUserId(context)
+            }
+            
+            if (userId.value.isNotEmpty()) {
+                com.example.kiram.ui.screens.profile.ProfileScreen(
+                    userId = userId.value,
+                    onNavigateToEditProfile = {
+                        // TODO: Navigate to edit profile screen
+                    },
+                    onNavigateToSettings = {
+                        // TODO: Navigate to settings screen
+                    },
+                    onLogout = {
+                        // Clear DataStore and navigate to login
+                        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                            val dataStore = (context.applicationContext as KiramApplication).dataStore
+                            dataStore.edit { preferences ->
+                                preferences.clear()
+                            }
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(0) { inclusive = true }
                             }
                         }
-                    )
-                }
-            ) { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Profil ekranı yakında eklenecek")
-                }
+                    }
+                )
             }
         }
         
@@ -241,51 +250,35 @@ fun KiramNavigation(
             }
         }
         
-        composable(Screen.PropertyDetail.route) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text("Ev Detayı") },
-                        navigationIcon = {
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
-                            }
-                        }
-                    )
+        composable(
+            route = Screen.PropertyDetail.route,
+            arguments = listOf(navArgument("propertyId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId") ?: return@composable
+            
+            com.example.kiram.ui.screens.tenant.PropertyDetailScreen(
+                propertyId = propertyId,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToMessage = { landlordId ->
+                    navController.navigate(Screen.Messages.route) // TODO: Specific chat
                 }
-            ) { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Ev detayı ekranı yakında eklenecek")
-                }
-            }
+            )
         }
         
         composable(Screen.AddProperty.route) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text("Ev Ekle") },
-                        navigationIcon = {
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = "Geri")
-                            }
-                        }
-                    )
-                }
-            ) { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Ev ekleme ekranı yakında eklenecek")
-                }
+            val userId = remember { mutableStateOf("") }
+            LaunchedEffect(Unit) {
+                userId.value = getUserId(context)
+            }
+            
+            if (userId.value.isNotEmpty()) {
+                com.example.kiram.ui.screens.landlord.AddPropertyScreen(
+                    landlordId = userId.value,
+                    onNavigateBack = { navController.popBackStack() },
+                    onPropertyAdded = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
         
